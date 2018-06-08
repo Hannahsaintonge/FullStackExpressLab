@@ -1,20 +1,30 @@
 body {
-   background-color: lightskyblue;
-   background-image: url(img/market.jpeg);
+   background-color: black;
+   background-image: url(img/junk.jpeg);
    background-position: center center;
    background-repeat: no-repeat;
    background-attachment: fixed;
    background-size: cover;
    height: 100vh;
+   border: none;
+   margin: 0;
+   padding: 0;
 }
 
-
+h4 {
+    color: #f3c1bc;   
+    font-family: 'Shrikhand', cursive;
+    margin: 0 20px;
+}
 
 h1 {
-color: #e5a59e;
+color: #f3c1bc;
 text-align: center;
 font-family: 'Shrikhand', cursive;
 font-weight: lighter;
+padding: 20px;
+display: flex;
+justify-content: center;
 }
 
 form {
@@ -31,8 +41,9 @@ input {
     border-radius: 5px;
     border-bottom: solid 1px black;
     outline: none;
-    height: 40px;
+    height: 30px;
     font-size: 16px;
+    margin: 0 20px;
 
 }
 
@@ -42,5 +53,36 @@ button {
     height: 40px;
     font-size: 16px;
     text-decoration: none;
+    margin: 0 20px;
+
+}
+
+.delete-btn {
+    font-family: 'Lato', sans-serif;
+    border-radius: 5px;
+    height: 20px;
+    font-size: 16px;
+    text-decoration: none; 
+    background-color: white;
+    padding: 5px;
+    text-align: center;
+    margin: 5px 20px;
+}
+
+.items {
+    background-color:white;
+    border-radius: 5px;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-direction: column;
+    width: 30%;
+}
+
+.items-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 

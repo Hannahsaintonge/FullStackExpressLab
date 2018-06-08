@@ -1,92 +1,47 @@
 "use strict";
 
 const express = require("express");
+const pg = require("pg");
+const pool = require("../pg-connection-pool");
 const cartRouter = express.Router();
-
-const items = [
-    {
-        product: "Cereal",
-        price: 4,
-        quantity: 2,
-        id: 0
-    },
-    {
-        product: "Ice Cream",
-        price: 6,
-        quantity: 1,
-        id: 1
-    },
-    {
-        product: "Coffee",
-        price: 3,
-        quantity: 1,
-        id: 2
-    },
-    {
-        product: "Cucumber",
-        price: 1,
-        quantity: 3,
-        id: 3
-    },
-    {
-        product: "Gummy Worms",
-        price: 2,
-        quantity: 1,
-        id: 4
-    }
-];
-
-let idCount = 6;
 
 //get 
 cartRouter.get("/items", (req, res) => {
- //the array from above
-  res.send(items);
+  pool.query("SELECT * FROM ShoppingCart ORDER BY id").then((result) => {
+    res.send(result.rows);
+  });
 });
 
 //post
 cartRouter.post("/items", (req, res) => {
-    console.log(req.body);
-    items.push({
-      product: req.body.product,
-      price: req.body.price,
-      quantity: req.body.quantity,
-      id: idCount++
+  pool.query("INSERT INTO ShoppingCart(product, price, quantity) VALUES($1::text, $2::int, $3::int)", 
+  [req.body.product, req.body.price, req.body.quantity])
+    .then(() => {
+      pool.query("SELECT * FROM ShoppingCart ORDER BY id").then((result) => {
+        res.send(result.rows);
+      });
     });
-    res.send(items);
   });
 
   //delete
   cartRouter.delete("/items/:id", (req, res) => {
-    console.log(req.body);
-    console.log(req.params.id);
-    for (let item of items) {
-      if (item.id == req.params.id) {
-        items.splice(items.indexOf(item), 1);
-      }
-    }
-    res.send(items);
+    pool.query("DELETE FROM ShoppingCart WHERE id=$1::int", [req.params.id])
+      .then(() => {
+        pool.query("SELECT * FROM ShoppingCart ORDER BY id").then((result) => {
+          res.send(result.rows);
+        });
+      });
   });
 
   //put
   cartRouter.put("/items/:id", (req, res) => {
-    console.log(req.body);
-    console.log(req.params.id);
-    for (let item of items) {
-      if (item.id == req.params.id) {
-        items.splice(items.indexOf(item), 1, {
-          product: req.body.product,
-          price: req.body.price,
-          quantity: req.body.quantity,
-          id: item.id
-        });
-      }
-    }
-    res.send(items);
+    pool.query("UPDATE ShoppingCart SET product=$1::text, price=$2::int, quantity=$3::int WHERE id=$4::int",
+     [req.body.product, req.body.price, req.body.quantity, req.params.id]).then(() => {
+       pool.query("SELECT * FROM ShoppingCart ORDER BY id").then((result) => {
+         res.send(result.rows);
+       })
+     })
   });
-
-
-
 
 //export the router object
 module.exports = cartRouter;

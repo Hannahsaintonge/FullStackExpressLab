@@ -1,23 +1,28 @@
 "use strict";
  
-const cart = {
+const items = {
 
     template: `
+
     <h1> A List Of Things I can't Afford</h1>
-    <section ng-repeat="item in $ctrl.items">
-     <input ng-blur="$ctrl.updateItem(item)" ng-model="item.product">
-     <input ng-blur="$ctrl.updateItem(item)" ng-model="item.price">
-     <input ng-blur="$ctrl.updateItem(item)" ng-model="item.quantity">
-     <a href="" ng-click="$ctrl.deleteItem(item.id);">Delete</a>
-   </section>
 
-
-    <form ng-submit="$ctrl.addItem($ctrl.newItem);">
-      <input type="text" placeholder="Item" ng-model="$ctrl.updateItem.product">
-      <input type="text" placeholder="Price" ng-model="$ctrl.updateItem.price">
-      <input type="text" placeholder="Quantity" ng-model="$ctrl.updateItem.quanity">
-      <button>Add Item</button>
+   <form ng-submit="$ctrl.addItem($ctrl.newItem);">
+    <input placeholder="Item" ng-model="$ctrl.newItem.product">
+    <input placeholder="Price" ng-model="$ctrl.newItem.price">
+    <input placeholder="Quantity" ng-model="$ctrl.newItem.quantity">
+    <button>Add Item</button>
   </form>
+    <div class ="items-section">
+    <section class="items" ng-repeat="item in $ctrl.items">
+    <h4>Item</h4>
+     <input type="text" ng-blur="$ctrl.updateItem(item)" ng-model="item.product">
+     <h4>Price</h4>
+     <input type="text" ng-blur="$ctrl.updateItem(item)" ng-model="item.price">
+     <h4>Quantity</h4>
+     <input type="text" ng-blur="$ctrl.updateItem(item)" ng-model="item.quantity">
+     <a class="delete-btn" href="" ng-click="$ctrl.deleteItem(item.id);">Delete</a>
+   </section>
+   </div>
     `,
 
     controller: ["CartService", function(CartService) {
@@ -26,12 +31,6 @@ const cart = {
       CartService.getAllItems().then((response) => {
         vm.items = response.data;
       });
-
-    //   vm.getItems = () => {
-    //       CartService.getAllItems().then((response) => {
-    //         vm.tems = response.data;
-    //       });
-    //   };
 
       vm.addItem = (newItem) => {
         CartService.addItem(newItem).then((response) => {
@@ -52,10 +51,22 @@ const cart = {
         });
       };
 
+      // vm.increaseItem = (item) => {
+      //   item.quantity++;
+      //   vm.updateItem(item);
+      // };
+
+      // vm.decreaseItem = (item) => {
+      //   if (item.quantity > 0) {
+      //     item.quantity--;
+      //   };
+      //   vm.decreaseItem(item);
+      // };
+
     }]
 
 };
 
 angular
   .module("app")
-  .component("cart", cart);
+  .component("items", items);
